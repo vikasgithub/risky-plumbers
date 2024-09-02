@@ -16,7 +16,7 @@ This rest services allows the caller to
     go run cmd/main.go
 ```
 
-- By default, the application runs on port `8080`. To change the port, create a yaml and provide the below configuration
+- By default, the application runs on port `8080`. To change the port, create a yaml file and provide the below configuration
 ```yaml
     server:
         port: <port>
@@ -38,7 +38,7 @@ This rest services allows the caller to
 
 The REST API to access the risky plumbers service is described below.
 
-### Get a list of Risks
+### Get a list of all Risks
 
 #### Request
 
@@ -104,7 +104,7 @@ The REST API to access the risky plumbers service is described below.
 
 `GET /risks/id`
 
-    curl -i -H 'Accept: application/json' http://localhost:8080/api/v1/risks/1
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/v1/risks/a3e00a37-f82c-4eef-9f13-2d192cb0bfbe
 
 #### Response (When a Risk is Found)
 
