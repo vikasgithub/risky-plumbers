@@ -1,6 +1,7 @@
 ## Code Structure
 
-This section explains the structure of the code
+This section explains the structure of the code. Below is the screenshot of the code directory structure.
+
 ![img.png](img.png)
 
 | File/Directory            | Notes                                                                                                                                                                                                                                      |
