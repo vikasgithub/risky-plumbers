@@ -11,31 +11,34 @@ This rest services allows the caller to
 
 ### Run the App
 - Download/clone the repository
-- From the risky-plumbers directory, run the below command
-
-
+- From the `risky-plumbers` directory, run the below command
+```console
     go run cmd/main.go
+```
 
-- By default, the application runs on port 8080. To change the port, create a yaml and provide the below configuration
-
-
+- By default, the application runs on port `8080`. To change the port, create a yaml and provide the below configuration
+```yaml
     server:
         port: <port>
+```
 
-- To make the configuration effective, application must be using the below command
+- To make the custom configuration effective, application must be run using the below command
 
-
+```console
     go run cmd/main.go --config=<path to the configuration file>
+```
 
 ### Run the tests
 
+```console
     go test ./...
+```
 
 ## REST API
 
-The REST API to the risky plumbers app is described below.
+The REST API to access the risky plumbers service is described below.
 
-### Get list of Risks
+### Get a list of Risks
 
 #### Request
 
@@ -62,6 +65,9 @@ The REST API to the risky plumbers app is described below.
         }
     ]
 
+##### Notes
+- Right now pagination is not supported
+
 ### Create a new Risk
 
 #### Request
@@ -73,10 +79,10 @@ The REST API to the risky plumbers app is described below.
 
 ###### Notes 
 - `state`, `title` and `description` in the request body are required
-- `state` can only be one of open, closed, accepted, investigating
-- `title` can have a maximum length of 256 characters
-- `description` can have a maximum length of 4096 characters
-- Unique Id (`id`) is generated and returned as part of the response payload 
+- `state` can only be one of `open`, `closed`, `accepted`, `investigating`
+- `title` can have a maximum length of `128` characters
+- `description` can have a maximum length of `4096` characters
+- Unique Id for the risk object (`id`) is generated and returned as part of the response payload 
 
 #### Response (Risk successfully Created)
 
