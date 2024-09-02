@@ -27,7 +27,7 @@ func (cr *CreateRiskRequest) Bind(r *http.Request) error {
 func (cr *CreateRiskRequest) Validate() error {
 	return validation.ValidateStruct(cr,
 		validation.Field(&cr.Title, validation.Required, validation.Length(0, 128)),
-		validation.Field(&cr.Description, validation.Required, validation.Length(0, 1024)),
+		validation.Field(&cr.Description, validation.Required, validation.Length(0, 4096)),
 		validation.Field(&cr.State, validation.Required,
 			validation.In("open", "closed", "accepted", "investigating")),
 	)

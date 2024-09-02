@@ -14,16 +14,14 @@ import (
 	"github.com/vikasgithub/risky-plumbers/internal/risk"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 )
-
-var stopSignalChan chan bool
 
 var flagConfig = flag.String("config", "./config/local.yml", "path to the config file")
 
 func main() {
-	stopSignalChan = make(chan bool)
 	flag.Parse()
-	// create root logger tagged with server version
 	logger := log.New()
 
 	// load application configurations
@@ -41,6 +39,7 @@ func main() {
 	healthcheck.RegisterHandlers(r)
 	apiRouter := buildApiRouter(logger)
 	r.Mount("/api/v1", apiRouter)
+
 	// build HTTP server
 	address := fmt.Sprintf(":%v", cfg.Server.Port)
 	server := &http.Server{
@@ -48,6 +47,8 @@ func main() {
 		Handler: r,
 	}
 
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.Error(err)
@@ -56,14 +57,15 @@ func main() {
 	}()
 	logger.Infof("server is running at %v", address)
 
-	<-stopSignalChan
+	<-ctx.Done()
+	logger.Info("got interruption signal")
 	if err := server.Shutdown(context.TODO()); err != nil {
-		panic(err) // failure/timeout shutting down the server gracefully
+		logger.Errorf("server shutdown returned an err: %v\n", err)
 	}
-	fmt.Println("Server closed")
+
+	logger.Info("Server stopped...")
 }
 
-// buildHandler sets up the HTTP routing and builds an HTTP handler.
 func buildApiRouter(logger log.Logger) *chi.Mux {
 	r := chi.NewRouter()
 
